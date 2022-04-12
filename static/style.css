@@ -1,0 +1,276 @@
+/* GLOBAL CSS */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    
+}
+
+h1{
+    font-size: 2.6rem;
+}
+
+h2{
+    font-size: 4.8rem;
+}
+
+h3{
+    font-size: 3rem;
+}
+
+h4,
+h5{
+    font-size: 2.8rem;
+}
+
+li{
+    font-size: 2rem;
+} 
+a {
+    color: #ffffff;
+    text-decoration:none ;
+}
+
+/* HEADER */
+
+.main-head {
+    background-color:black;
+    color: #ffffff;
+}
+
+nav {
+    min-height: 10vh;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+    padding: 2rem;
+
+}
+
+nav ul{
+    display: flex;
+    flex: 1 1 40rem;
+    justify-content: space-around;
+    align-items: center;
+    list-style: none;
+}
+
+#logo {
+    flex: 2 1 40rem;
+}
+
+/* BODY */ 
+
+
+/* The hero image */
+.hero-image {
+    
+    background-image:  url("/static/Hero3.png");
+  
+    /* Set a specific height */
+    height: 90vh;
+    width: 100%;
+  
+    /*Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+  }
+  
+  /* Place text in the middle of the image */
+  .hero-text {
+    position: absolute;
+    top: 50%; /*to place the text in the middle of the image*/
+    left: 50%; /*and to place the text in the right side of the middle of the image*/
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+
+  .grand_titre_h1{  /* STOP Sharing fake news on Twitter*/
+    text-align: right;
+
+    width: 1000px;;
+    font-size: 85px;
+    font-family: Helvetica, sans-serif;
+    font-weight: bolder;
+    letter-spacing: 0.22px;
+
+    color: #FFFEFE;
+    margin-left: 300px;
+  }
+  
+  .petit_titre_hero{  /*Determine the percentage of truthfulness of your tweet*/
+      width: 1000px;
+
+      font-size: 30px;
+      font-family: Helvetica, sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.08px;
+
+      text-align: right;
+      margin-left: 290px;
+      color: #FFFEFE;
+  }
+
+
+  .button_predict{ /*Button "predict" in the hero image*/
+    text-align: right;
+    
+
+
+    font-size: 40px;
+    font-weight: bolder;
+    border-radius: 30px;
+    border-color: #ffffff;
+
+    /*border-width: 0.5vh;*/
+    margin: 20px;
+    padding: 20px 90px 30px 90px; /*top right bottom left*/
+    
+    color: #ffffff;
+    background-color:#3194db;
+    /*border: none; /*Pour enlever les bordures du bouton*/
+
+    display: block;
+    margin-left: 968px;
+    margin-top: 60px;
+    scroll-behavior: smooth;
+  }
+
+  
+
+ 
+/* AFTER THE HERO IMAGE*/
+
+
+.contenu {
+    margin: 200px;
+}
+
+/*.guide_formular{
+    font-size: 60px;
+    font-family: Helvetica, sans-serif;
+    font-weight: bolder;
+    letter-spacing: 0.22px;
+
+}*/
+.form-link{
+    display: flex;
+    align-items: center;
+}
+.link {  /*Barre de saisie du formulaire*/
+    display: inline;
+    width: 800px;
+    height: 70px;
+    padding-left: 1.5em;
+    border-radius: 10px;
+    background-color:rgb(180, 225, 240);
+    border: none;
+    text-align: left;
+    font: normal normal bold 4em Helvetica;
+    letter-spacing: 0px;
+    color: #1DA0F1;
+    
+    
+
+}
+
+.button_go{
+    font-size: 35px;
+    border-radius: 20px;
+    margin: 20px;
+    margin-left: 100px;
+    padding: 10px 60px 20px 60px; /*top right bottom left*/
+    border-color: white;
+    
+    color: #ffffff;
+    background-color: #3194db;
+  }
+
+  .button_go:hover{
+    border-color: #3194db;
+    background-color: #ffffff;
+    color: #3194db;
+  }
+
+  .button_result{
+    font-size: 35px;
+    border-radius: 20px;
+    margin: 20px;
+    padding: 10px 60px 20px 60px; /*top right bottom left*/
+    
+    color: #ffffff;
+    background-color:lightgreen;
+    border: none; /*Pour enlever les bordures du bouton*/
+
+    display: block;
+    margin-left: 250px;
+    margin-bottom: 50px;
+  }
+
+  
+  
+
+  .text_lorem{
+      font-size: 30px;
+      color: black;
+      width: 800px;
+      margin-top: 50px;
+      margin-bottom: 100px;
+  }
+
+  .payments{
+      display: flex;
+      margin-top: 100px;
+      justify-content: space-around;
+      width: 1250px;
+  }
+
+  .MTN_image{
+      margin-left: 200px;
+  }
+
+  .orange_image{
+      margin-left: 200px;
+  }
+
+  /* FOOTER*/
+
+  .footer{
+      background-color: black;
+      padding-top: 15px;
+      padding-bottom: 1px;
+      
+  }
+
+  .contact_footer{
+      display: flex;
+      margin-bottom: 10px;
+      margin-left: 205px;
+      
+  }
+  .text_footer{
+      color: #ffffff;
+      font-size: 30px;
+      font-family: Helvetica, sans-serif;
+      font-weight: 300;
+      margin-left: 25px;
+  }
+
+
+  #pc1 {
+    display: none;
+    opacity: 1;
+    transition: opacity 1s;
+  }
+  #pc1.hide {
+    opacity: 0;
+  }
