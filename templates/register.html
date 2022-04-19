@@ -1,0 +1,69 @@
+{% extends 'base_login.html' %}
+
+{% block title %} register {% endblock title %}
+
+{% block main_title %}Sign Up{% endblock main_title %}
+
+{% block mt %}mt-2 mx-5 pt-2{% endblock mt %}
+
+{% block form %}
+<form action="">
+    <div class="formgroup">
+        <label class="form-label" for="username">Username <span class="text-danger">*</span></label>
+        <input type="text" name="username" placeholder="kndb" class="form-control border-0" required>
+        <label class="form-label" for="username">Email </label>
+        <input type="email" name="email" placeholder="kndb@gmail.com" class="form-control border-0">
+        <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <input id="password" class="form-control border-end-0 border input w-" type="password">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+                    onclick="showhide('password')" type="button">
+                    <i id="eye_password" class="fa fa-eye text-dark"></i>
+                </button>
+            </span>
+        </div>
+        <label class="form-label" for="password">Confirm password <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <input id="confirmPassword" class="form-control border-end-0 border input w-" type="password">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+                    onclick="showhide('confirmPassword')" type="button">
+                    <i id="eye_confirmPassword" class="fa fa-eye text-dark"></i>
+                </button>
+            </span>
+        </div>
+        <span class="d-flex justify-content-end">
+            <a class="color-twitter" href="{% url 'login' %}">Already have an account?
+                Sign
+                in</a>
+        </span>
+
+    </div>
+    <span class="bloc-btn">
+        <input type="submit" value="Sign Up" class='btn btn-login mt-1'>
+    </span>
+
+</form>
+
+{% endblock form %}
+
+{% block javascript %}
+<script>
+    var showhide = function (id) {
+        var pwd = document.getElementById(id);
+        var eye = document.getElementById(`eye_${id}`);
+        if (pwd.getAttribute("type") === "text") {
+            pwd.setAttribute("type", "password");
+            eye.classList.add("fa-eye");
+            eye.classList.remove("fa-eye-slash");
+        } else {
+            pwd.setAttribute("type", "text");
+            eye.classList.remove("fa-eye");
+            eye.classList.add("fa-eye-slash");
+        }
+    }
+</script>
+
+
+{% endblock javascript %}

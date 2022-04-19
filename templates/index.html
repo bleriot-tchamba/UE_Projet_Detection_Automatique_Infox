@@ -1,104 +1,119 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang = 'en'>
-    <head>
-        <meta charset="utf-8">
-        <title>Fake-News Detections</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    </head>
-    <body>
-        <header class="main-head">
-            <nav>
-                <h1 id = "logo">FakeNewsDetector</h1>
-                <ul>
-                    <li><a href="#concept">Concepts</a></li>
-                    <li><a href="#">Contacts</a></li>
-                    <li><a href="#donate">Donate</a></li>
-                </ul>
-            </nav>
-        </header>
+<html lang='en'>
 
-        <div class="hero-image">
-            <div class="hero-text">
-              <h1 class="grand_titre_h1">STOP Sharing fake news on Twitter</h1>
-              <p class="petit_titre_hero">Determine the percentage of truthfulness of your tweet</p>
-              <a href="#contenu_tweet"> <button class="button_predict">Predict</button> </a>
-              
+<head>
+    <meta charset="utf-8">
+    <title>Fake-News Detections</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css"
+        integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header class="main-head">
+        <nav>
+            <h1 id="logo">FakeNewsDetector</h1>
+            <ul>
+                <li><a href="#concept">Concepts</a></li>
+                <li><a href="#">Contacts</a></li>
+                <li><a href="#donate">Donate</a></li>
+                {% if not user.is_authenticated %}
+                {% else %}
+                <li><a href="{% url 'login' %}">Sign In</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero-image">
+        <div class="hero-text">
+            <h1 class="grand_titre_h1">STOP Sharing fake news on Twitter</h1>
+            <p class="petit_titre_hero">Determine the percentage of truthfulness of your tweet</p>
+            <a href="#contenu_tweet"> <button class="button_predict">Predict</button> </a>
+
+        </div>
+    </div>
+
+    <div class="contenu">
+
+
+        <form method="post">
+            <label for='link'>
+                <h2 id="contenu_tweet" class="guide_formular">Link of the tweet</h2>
+            </label> <br>
+            <div class="form-link">
+                <input class="link" type='text' id='link' name='link'>
+                <input class="button_go" type='button' value='Go' onclick="showHide();">
             </div>
-        </div> 
-        
-        <div class="contenu">
+        </form>
 
-            
-            <form method="post">
-                <label for= 'link'> <h2 id="contenu_tweet" class="guide_formular">Link of the tweet</h2> </label> <br>
-                <div class="form-link">
-                    <input class="link" type = 'text' id= 'link' name = 'link'>
-                    <input class="button_go" type = 'button' value= 'Go' onclick="showHide();">
-                </div>
-            </form>
+        <button class="button_result" id="pc1"> 98% Vrai </button>
 
-            <button class="button_result" id="pc1"> 98% Vrai </button>
-
-            <div id="concept">
-                <h2>Concepts</h2>
-                <div class="text_lorem">
-                    Cette plateforme est un outil permettant de détecter de façon automatique la véracité d'un tweet juste a partir de son lien. Les fakes news ayant pris de l'ampleur dans les médias,il est très difficile de nos jours , de discerner les informations vraies de celle fakes. C'est ainsi que la plateforme entre en jeu, elle vous fournit le pourcentage de véracité d'une information, vous aidant a avoir le contrôle sur les données que vous consommez quotidiennement. Cet outil est révolution dans le domaine des fausses informations, car il détecte de façon rapide, précise les informations soupsconeuses et fausses. 
-                    Réalisé par trois étudiants de l'université de Yaoundé I.
-                </div>
+        <div id="concept">
+            <h2>Concepts</h2>
+            <div class="text_lorem">
+                Cette plateforme est un outil permettant de détecter de façon automatique la véracité d'un tweet juste a
+                partir de son lien. Les fakes news ayant pris de l'ampleur dans les médias,il est très difficile de nos
+                jours , de discerner les informations vraies de celle fakes. C'est ainsi que la plateforme entre en jeu,
+                elle vous fournit le pourcentage de véracité d'une information, vous aidant a avoir le contrôle sur les
+                données que vous consommez quotidiennement. Cet outil est révolution dans le domaine des fausses
+                informations, car il détecte de façon rapide, précise les informations soupsconeuses et fausses.
+                Réalisé par trois étudiants de l'université de Yaoundé I.
             </div>
-
-            <div id="donate">
-                <h2>Donate</h2>
-                <div class="payments">
-                    <img src= "static/Paypal.png" height="200">
-                    <img class="MTN_image" src="static/MTN.png" height="200">
-                    <img class="orange_image" src="static/orange-money.png" height="200">
-                    
-
-                </div>
-            </div>
-            
         </div>
 
-        <footer>
-            <div class="footer">
-                <div class="contact_footer">
-                    <img src="static/Icon awesome-github.png" height="50">
-                    <span class="text_footer"> Lorem ipsum.</span>
-                </div>
-
-                <div class="contact_footer">
-                    <img src="static/Icon awesome-whatsapp.png" height="50">
-                    <span class="text_footer"> 6565628782</span>
-                </div>
-
-                <div class="contact_footer">
-                    <img src="static/Icon awesome-facebook.png" height="50">
-                    <span class="text_footer"> Lorem ipsum.</span>
-                </div>
-
-                
-                
+        <div id="donate">
+            <h2>Donate</h2>
+            <div class="payments">
+                <img src="static/Paypal.png" height="200">
+                <img class="MTN_image" src="static/MTN.png" height="200">
+                <img class="orange_image" src="static/orange-money.png" height="200">
 
 
             </div>
-        </footer>
-        
-    </body>
+        </div>
 
-    <script>
-        function showHide() {
-            var x = document.getElementById("pc1");
-            console.log("Ok");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
+    </div>
+
+    <footer>
+        <div class="footer">
+            <div class="contact_footer">
+                <img src="static/Icon awesome-github.png" height="50">
+                <span class="text_footer"> Lorem ipsum.</span>
+            </div>
+
+            <div class="contact_footer">
+                <img src="static/Icon awesome-whatsapp.png" height="50">
+                <span class="text_footer"> 6565628782</span>
+            </div>
+
+            <div class="contact_footer">
+                <img src="static/Icon awesome-facebook.png" height="50">
+                <span class="text_footer"> Lorem ipsum.</span>
+            </div>
+
+
+
+
+
+        </div>
+    </footer>
+
+</body>
+
+<script>
+    function showHide() {
+        var x = document.getElementById("pc1");
+        console.log("Ok");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
         }
-        
-    </script>
-    
+    }
+</script>
+
 
 </html>
