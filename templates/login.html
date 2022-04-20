@@ -1,0 +1,54 @@
+{% extends 'base_login.html' %}
+
+{% block title %} login {% endblock title %}
+
+{% block main_title %}Sign In{% endblock main_title %}
+
+{% block form %}
+<form action="">
+    <div class="formgroup">
+        <label class="form-label" for="username">Username <span class="text-danger">*</span></label>
+        <input type="text" name="username" placeholder="kndb" class="form-control border-0" required>
+        <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <input id="password" class="form-control border-end-0 border input w-" type="password">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
+                    onclick="showhide()" type="button">
+                    <i id="eye" class="fa fa-eye text-dark"></i>
+                </button>
+            </span>
+        </div>
+        <span class="d-flex justify-content-end">
+            <a class="color-twitter" href="{% url 'register' %}">Don't have an account?
+                register here</a>
+        </span>
+
+    </div>
+    <span class="bloc-btn">
+        <input type="submit" value="Sign In" class='btn btn-login mt-3'>
+    </span>
+
+</form>
+
+{% endblock form %}
+
+{% block javascript %}
+<script>
+    var showhide = function () {
+        var pwd = document.getElementById("password");
+        var eye = document.getElementById("eye");
+        if (pwd.getAttribute("type") === "text") {
+            pwd.setAttribute("type", "password");
+            eye.classList.add("fa-eye");
+            eye.classList.remove("fa-eye-slash");
+        } else {
+            pwd.setAttribute("type", "text");
+            eye.classList.remove("fa-eye");
+            eye.classList.add("fa-eye-slash");
+        }
+    }
+</script>
+
+
+{% endblock javascript %}

@@ -10,3 +10,11 @@ def index(request):
 		'liste': liste	 
 	};
     return render(request, 'index.html', context)
+    
+
+
+def login(request):
+    return render(request, 'login.html')
+
+def register(request):
+    return render(request, 'register.html')
