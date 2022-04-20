@@ -3,9 +3,13 @@
 <html lang = 'en'>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Fake-News Detections</title>
         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    </head>
+        <script src="https://kit.fontawesome.com/f1fb171e01.js" crossorigin="anonymous"></script>
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" integrity="sha512-xX2rYBFJSj86W54Fyv1de80DWBq7zYLn2z0I9bIhQG+rxIF6XVJUpdGnsNHWRa6AvP89vtFupEPDP8eZAtu9qA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
+    </head>
     <body>
         <header class="main-head">
             <nav>
@@ -34,11 +38,72 @@
                 <label for= 'link'> <h2 id="contenu_tweet" class="guide_formular">Link of the tweet</h2> </label> <br>
                 <div class="form-link">
                     <input class="link" type = 'text' id= 'link' name = 'link'>
-                    <input class="button_go" type = 'button' value= 'Go' onclick="showHide();">
+                    <input id="myBtn" class="button_go" type = 'button' value= 'Go' >
                 </div>
             </form>
 
-            <button class="button_result" id="pc1"> 98% Vrai </button>
+
+           <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    
+                    <div class="modal-body">
+
+                        <div class="close-contener">
+                            <span class="close">&times;</span>
+                        </div>
+                        
+                        <div class="result"> 
+                           <span class="truthfulness-rate">Vrai à 75% </span>
+                           <span class="text-after-rate">l'information du tweet à été cité par </span>
+                        </div>
+
+                        <div class="compte-contener">
+                            {% for idi in liste %} 
+                            <div class="infos-comptes">
+                                <div class="entete-compte">
+                                    <img class="image-compte" src= "static/Icon awesome-facebook.png" height="85">
+                                    <div class="nameAccount-and-username">
+                                        <span class="nameAccount">Account</span>
+                                        <span class="username">@username</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="message">
+                                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                                    sed diam nonumy eirmod tempor invidunt ut labore et dolore 
+                                    magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
+                                    et justo duo dolores et ea rebum. 
+
+                                </div>
+
+
+                            </div>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="notation">
+
+                            <div class="rating">
+                                <i class="rating__star far fa-star"></i>
+                                <i class="rating__star far fa-star"></i>
+                                <i class="rating__star far fa-star"></i>
+                                <i class="rating__star far fa-star"></i>
+                                <i class="rating__star far fa-star"></i>
+                            </div>
+
+                            <button class="button-noter"> Noter </button>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            
+            </div>
 
             <div id="concept">
                 <h2>Concepts</h2>
@@ -87,17 +152,60 @@
         
     </body>
 
+    <!--Code javascript pour la modale-->
+
     <script>
-        function showHide() {
-            var x = document.getElementById("pc1");
-            console.log("Ok");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
+        // Get the modal
+        var modal = document.getElementById("myModal");
+        
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+        
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
         }
         
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+
+<!--Code Javascript pour la noter la reponse-->
+    <script>
+        const ratingStars = [...document.getElementsByClassName("rating__star")];
+
+        function executeRating(stars) {
+        const starClassActive = "rating__star fas fa-star";
+        const starClassInactive = "rating__star far fa-star";
+        const starsLength = stars.length;
+        let i;
+        stars.map((star) => {
+            star.onclick = () => {
+            i = stars.indexOf(star);
+
+            if (star.className === starClassInactive) {
+                for (i; i >= 0; --i) stars[i].className = starClassActive;
+            } else {
+                for (i; i < starsLength; ++i) stars[i].className = starClassInactive;
+            }
+            };
+        });
+        }
+        executeRating(ratingStars);
+
     </script>
     
 

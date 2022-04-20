@@ -215,9 +215,213 @@ nav ul{
     margin-left: 250px;
     margin-bottom: 50px;
   }
+  
+
+  /* THE MODAL */
+
+  /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    margin-bottom: 10rem;
+    padding: 0;
+    /*border: 1px solid #888;*/
+    border-radius: 1.5rem;
+    border-color: #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    /*-webkit-animation-name: blowUpContent;*/
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    /*animation-name: blowUpContent;*/
+    animation-duration: 0.4s
+  }
+  
+  /* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0} 
+    to {top:0; opacity:1}
+  }
+  
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+  
+  /* The Close Button */
+.close {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 300px;
+}
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .close-contener{
+      margin-bottom: 8rem;
+  }
+  
+  
+  /* body of modal*/
+.modal-body {padding: 2px 16px;}
+
+.truthfulness-rate {
+    color: #21A23F;
+    font-size: 55px;
+    font-family: Helvetica, sans-serif;
+    font-weight:bolder;
+    font-style: normal;
+    margin-right: 20px;
+}
+
+.text-after-rate {
+    color: #1A3257;    
+    font-size: 55px;
+    font-family: Helvetica, sans-serif;
+    font-weight:bolder;
+    font-style: normal;
+}
+
+.result { /* div that content *truthfulness-rate* and *text-after-rate* */
+    display: flex;
+    /*justify-content: space-between;*/
+    justify-content: center;
+    /*width: 80%;*/
+    /*align-items:flex-start;*/
+}
+
+.compte-contener {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    /*max-width: 80%;*/
+    justify-content: center;
+}
+
+.infos-comptes{
+    
+    width: 25%;
+    border-radius: 13px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #ffffff;
+    margin: 35px 35px 5px 35px;
+}
+
+.entete-compte{
+    /*position: relative;
+    margin: auto;
+    width: 50%;*/
+    display: flex;
+    
+}
+
+.message {
+    /*position: relative;
+    margin: auto;
+    width: 50%;*/
+    font-size: 15px;
+    font-family: 'Calibri', 'Trebuchet MS', sans-serif;
+    color: black;
+    padding: 15px;
+    
+}
+
+.nameAccount-and-username{
+    display: block;
+    padding: 25px 15px 15px 15px; /*top right bottom left*/
+    
+    
+}
+
+.nameAccount{
+    display: block;
+    letter-spacing: 0.06px;
+    color: #1A3257;
+    font-size: 20px;
+    font-family: Helvetica, sans-serif;
+    font-weight:bold;
+    font-style: normal;
+}
+
+.username{
+    display: block;
+    letter-spacing: 0.06px;
+    color: #1A3257;
+    font-size: 20px;
+    font-family: Helvetica, sans-serif;
+    font-weight:bold;
+    font-style: normal;
+}
+
+.image-compte{
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.rating {
+    /*width: 800px;*/
+    font-size: 40px;
+   
+    /*padding: 120px;*/
+    
+}
+  
+.rating__star {
+    cursor: pointer;
+    color: #DEC912;
+    
+}
+
+.notation{
+    display: flex;
+    margin-left: 12rem;
+    margin-top: 10rem;
+    margin-bottom: 15rem;
+    
+}
+
+.button-noter{
+    font-size: 30px;
+    border-radius: 40px;
+    
+    margin-left: 5rem;
+    padding: 10px 25px 10px 25px; /*top right bottom left*/
+    border-style: none;
+    color: #ffffff;
+    background-color: #3194db;
+
+}
+  
+  
 
   
-  
+  /* A partir du text */
 
   .text_lorem{
       font-size: 30px;
