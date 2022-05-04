@@ -39,7 +39,7 @@
             <form method="post">
                 <label for= 'link'> <h2 id="contenu_tweet" class="guide_formular">Link of the tweet</h2> </label> <br>
                 <div class="form-link">
-                    <input class="link" type = 'text' id= 'link' name = 'link'>
+                    <input class="link" type = 'text' id= 'link' name = 'link' required=true>
                     <input id="myBtn" class="button_go" type = 'button' value= 'Go' >
                 </div>
             </form>
@@ -198,12 +198,15 @@
             .then(response => response.json())
             .then(result => {
                 console.log(result);
+                result.user = JSON.parse(result.user);
+                //result.probabilites = JSON.parse(result.probabilites);
                 const resultElement = document.querySelector(".compte-contener");
                 resultElement.innerHTML = `<div class="bloc">
                     <div class="entete-compte" >
-                        <img class="image-compte" src="static/Icon awesome-facebook.png" height="80" width="80">
+                        <img class="image-compte" src="${result.user.profile_image_url_https}" height="80"
+                            width="80">
                         <div class="nameAccount-and-username">
-                            <span class="username">@${result['username']}</span>
+                            <span class="username">@${result.user.screen_name}</span>
                         </div>
 
                     </div>
@@ -212,8 +215,9 @@
                         ${result['msg']}
                     </div>
 
-                    <span>Subject : ${result['subject']}
-
+                    <span>Mots clé : ${result['keyword']}</span>
+                    <div> ${result.probabilites['moyenne']}</div>
+                    
                 </div>`;
             })
         modal.style.display = "block";

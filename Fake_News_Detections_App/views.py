@@ -1,8 +1,19 @@
+from audioop import avg
+import json
+
+import Levenshtein
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
+
 import pytwitter
 from pytwitter import Api
+
+import tweepy
+
+from gensim.summarization.summarizer import summarize
+from gensim.summarization import keywords
 
 
 # Create your views here.
@@ -28,20 +39,53 @@ def index(request):
 def extract_subject(request):
     try:
         link_tweet = request.POST.get('link_tweet').split('/')[-1]
-        api = Api(
-            consumer_key=api_key,
-            consumer_secret=api_secrets,
-            access_token=access_token,
-            access_secret=access_secret
-        )
-        response = api.get_tweet(tweet_id=link_tweet,expansions="author_id",tweet_fields=["created_at"], user_fields=["id", "username","verified", 'name'])
+        # api = Api(
+        #     consumer_key=api_key,
+        #     consumer_secret=api_secrets,
+        #     access_token=access_token,
+        #     access_secret=access_secret
+        # )
+        
+        auth = tweepy.OAuthHandler(api_key, api_secrets)
+        auth.set_access_token(access_token, access_secret)
+        api_tweepy = tweepy.API(auth)
+        
+        # response = api.get_tweet(tweet_id=link_tweet,expansions="author_id",tweet_fields=["created_at"], user_fields=["id", "username","verified", 'name'])
 
-        tweet_msg = response.data.text
-        print(tweet_msg, response.includes.users[0].name)
-        return JsonResponse(status=200, data={'msg': tweet_msg, 'username': response.includes.users[0].username, 'name': response.includes.users[0].name, 'subject':None})
-    except pytwitter.error.PyTwitterError:
+        tweet = api_tweepy.get_status(link_tweet)
+        
+        key_words = keywords(tweet.text, words=5, lemmatize=True).replace('\n', ' ')
+        
+        tweets = api_tweepy.search_tweets(key_words, count=300)
+        distances = []
+        identique = []
+        
+        for search_tweet in tweets:
+            print(search_tweet.text, ".......",tweet.text, "\n\n")
+            identique.append(search_tweet.text==tweet.text)
+            distances.append(Levenshtein.ratio(tweet.text, search_tweet.text))
+        
+        print(tweet.text, '....\n\n')
+        print("keywords:",key_words, '....\n\n')
+        print(tweets, '....\n\n\n')
+        print(f'mayenne = {sum(distances)/len(distances)}', f'max={max(distances)}', f'min={min(distances)}')
+        print(identique)
+        
+        pbc = dict()
+        pbc['moyenne'] = sum(distances)/len(distances)
+        pbc['max'] = max(distances)
+        pbc['min'] = min(distances)
+        
+        
+        
+
+        
+        return JsonResponse(status=200, data={'msg': tweet.text, 'user': json.dumps(tweet.user._json), 'keyword': key_words, 'probabilites': json.dumps(pbc)})
+    except pytwitter.error.PyTwitterError as e:
+        print("Execption ....:", e)
         return JsonResponse(status=500, data={'msg': 'Bad request'})
     except Exception as e:
+        print("Execption:", e)
         return JsonResponse(status=500, data={'msg': 'Bad request'})
 
 

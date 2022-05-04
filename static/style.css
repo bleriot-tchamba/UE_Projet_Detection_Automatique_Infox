@@ -153,6 +153,7 @@ nav ul{
 
 .contenu {
     margin: 200px;
+    margin-top: 100px;
 }
 
 /*.guide_formular{
@@ -165,30 +166,31 @@ nav ul{
 .form-link{
     display: flex;
     align-items: center;
+    justify-content: space-between;
+
+    margin: 20px 0 20px 0;
 }
+
 .link {  /*Barre de saisie du formulaire*/
     display: inline;
-    width: 800px;
+    width: 80%;
     height: 70px;
-    padding-left: 1.5em;
+    padding-left: 1em;
     border-radius: 10px;
     background-color:rgb(180, 225, 240);
     border: none;
     text-align: left;
-    font: normal normal bold 4em Helvetica;
+    font: normal normal bold 3em Helvetica;
     letter-spacing: 0px;
     color: #1DA0F1;
-    
-    
-
 }
 
 .button_go{
     font-size: 35px;
     border-radius: 20px;
-    margin: 20px;
-    margin-left: 100px;
-    padding: 10px 60px 20px 60px; /*top right bottom left*/
+    width: 100px;
+    height: 70px;
+    /* padding: 10px 60px 20px 60px; top right bottom left */
     border-color: white;
     
     color: #ffffff;
@@ -199,6 +201,7 @@ nav ul{
     border-color: #3194db;
     background-color: #ffffff;
     color: #3194db;
+    cursor: pointer;
   }
 
   .button_result{
@@ -216,6 +219,10 @@ nav ul{
     margin-bottom: 50px;
   }
   
+
+  #concept{
+      margin-top: 100px;
+  }
 
   /* THE MODAL */
 
@@ -434,16 +441,8 @@ nav ul{
   .payments{
       display: flex;
       margin-top: 100px;
-      justify-content: space-around;
-      width: 1250px;
-  }
-
-  .MTN_image{
-      margin-left: 200px;
-  }
-
-  .orange_image{
-      margin-left: 200px;
+      justify-content: space-between;
+      width: 100%;
   }
 
   /* FOOTER*/
