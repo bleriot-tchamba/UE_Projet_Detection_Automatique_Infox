@@ -126,13 +126,15 @@ def signin(request):
 
 
 def register(request):
+    val = True
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         print(request.POST)
         if user_form.is_valid():
+            val = True
             user = user_form.save()
             login(request, user)
-            return render(request, 'index.html', {'firstime': True})
+            return render(request, 'index.html', {'val':"first"})
     else:
         user_form = UserForm()
     return render(request, 'register.html', {'form' : user_form})

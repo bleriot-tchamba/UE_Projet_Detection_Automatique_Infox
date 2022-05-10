@@ -7,6 +7,18 @@
         <title>Fake-News Detections</title>
         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
         <script src="https://kit.fontawesome.com/f1fb171e01.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+{% if val == 'first' %}
+
+<script>
+	$(document).ready(function(){
+		$("#myModalFirst").modal('show');
+	});
+</script>
+{% endif %}
+
+
         
     </head>
     <body>
@@ -24,6 +36,9 @@
                                 style="background-color:#DC3545; color:white; border-radius:10px; height:110%"><a
                                     href="{% url 'license' %}"
                                     >Abonne toi!!</a>
+                            </li>
+
+                             <li><a href="{% url 'logout' %}">Logout</a>
                             </li>
                         {% endif %}
                     {% else %}
@@ -43,6 +58,39 @@
         </div> 
         
         <div class="contenu">
+    <!--<script>
+    console.log({{val}});
+    </script>-->
+
+    <!--{% if val %}-->
+    <div id="myModalFirst" class="modal fade" role="dialog">
+        <!--<div class="modal-dialog">-->
+        <!-- Modal content-->
+
+            <div class="modal-content">
+                            
+                    <div class="modal-body">
+
+                        <div class="close-contener">
+                            <span class="close-fade">&times;</span>
+                        </div>
+
+                         <!--<div class="compte-contener">-->
+                         <div class = "fade">
+                            <span class="first_register">Hello vous avez un mois d'abonnement Gratuit</span>
+                            <a href="{% url 'license' %}" ><button class="button-abonnes">Abonne toi!!</button></a>
+                         </div>-->
+                         <!--</div>-->
+                    </div>
+            
+            </div>
+
+        <!--</div>-->
+    </div>
+    <!--{% endif %}-->
+
+
+
 
             
             <form method="post">
@@ -189,10 +237,16 @@
         }
     }
         
+    // Get the two modals
+    var modal = document.getElementById("myModal");
+    var modalFade = document.getElementById("myModalFirst");
     
     // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
     
+    // Get the <span> element that closes the modal"close-fade"
+    var span = document.getElementsByClassName("close")[0];
+    var spanFade = document.getElementsByClassName("close-fade")[0];
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -247,6 +301,33 @@
     }
     
     
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    
+    }
+
+    // When the user clicks on <span> (x), close the modal-Fade
+    spanFade.onclick = function() {
+        modalFade.style.display = "none";
+    
+    }
+    
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+    // When the user clicks anywhere outside of the modal-Fade, close it
+    window.onclick = function(event) {
+        if (event.target == modalFade) {
+            modalFade.style.display = "none";
+        }
+    }
 </script>
 
 
@@ -274,6 +355,13 @@
     executeRating(ratingStars);
 
 </script>
+
+
+<!--<script>
+   $(window).load(function(){        
+   $('#myModalFirst').modal('show');
+    }); 
+</script>-->
     
 
 <script>
