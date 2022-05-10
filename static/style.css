@@ -288,11 +288,56 @@ nav ul{
     cursor: pointer;
   }
 
+
   .close-contener{
       margin-bottom: 8rem;
   }
   
   
+
+   /* The Close-fade Button */
+.close-fade {
+    color: red;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 300px;
+}
+  
+  .close-fade:hover,
+  .close-fade:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .first_register{
+    color: #1A3257;    
+    font-size: 30px;
+    font-family: Helvetica, sans-serif;
+    font-weight:bolder;
+    font-style: normal;
+    justify-content: center;
+    display: flex;
+
+  }
+
+  .button-abonnes{
+    display: block;
+    margin: auto;
+    margin-top: 5rem;
+    font-size: 30px;
+    border-radius: 40px;
+    
+   /* margin-left: 5rem;*/
+    padding: 10px 25px 10px 25px; /*top right bottom left*/
+    border-style: none;
+    color: #ffffff;
+    /*background-color: #3194db;*/
+    background-color:red;
+
+}
+
   /* body of modal*/
 .modal-body {padding: 2px 16px;}
 

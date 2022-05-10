@@ -37,8 +37,8 @@ def index(request, **kwargs):
     liste = [1,2,3,4,5,6]
 
     context = {
-		'liste': liste	 
-	};
+		'liste': liste,    
+	}
     return render(request, 'index.html', context)
 
 # @require_POST
@@ -113,13 +113,15 @@ def signin(request):
 
 
 def register(request):
+    val = True
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         print(request.POST)
         if user_form.is_valid():
+            val = True
             user = user_form.save()
             login(request, user)
-            return redirect(reverse('index', kwargs={ 'register': True }))
+            return render(request, 'index.html', {'val':"first"})
     else:
         user_form = UserForm()
     print("Okj")
