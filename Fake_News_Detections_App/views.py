@@ -1,10 +1,12 @@
 import json
-
+import time
+from datetime import timedelta
 import Levenshtein
 
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -35,13 +37,26 @@ access_secret = "cuZPDdGJMVZTqkr6qNv83HFRsCLF4NhTTbM6CaYWC4PMz"
 def index(request, **kwargs):
     
     liste = [1,2,3,4,5,6]
-
+    end_date = timezone.now() - request.user.date_joined
     context = {
-		'liste': liste	 
-	};
+		'liste': liste,
+        'firstime': True
+	}
+    print(request.user._wrapped.__dict__)
+    
+    if request.user.myuser.is_free_trial:
+        if end_date.days > 30:
+            return render(request, 'licence.html')
+        context['start_date'] = int(time.mktime(request.user.date_joined.timetuple())) * 1000
+        context['free_trial'] = "free"
+            
+
+    else:
+        is_expired = request.user.myuser.is_expired
+        context['is_expired'] = is_expired
+    
     return render(request, 'index.html', context)
 
-# @require_POST
 def extract_subject(request):
     try:
         link_tweet = request.POST.get('link_tweet').split('/')[-1]
@@ -70,15 +85,13 @@ def extract_subject(request):
             print(search_tweet.full_text, ".......",tweet.full_text, "\n\n")
             identique.append(search_tweet.full_text==tweet.full_text)
             distances.append(Levenshtein.ratio(tweet.full_text, search_tweet.full_text))
-        
-        print(tweet.text, '....\n\n')
         print("keywords:",key_words, '....\n\n')
         print(tweets, '....\n\n\n')
         print(f'mayenne = {sum(distances)/len(distances)}', f'max={max(distances)}', f'min={min(distances)}')
         print(identique)
         
         pbc = dict()
-        pbc['moyenne'] = sum(distances)/len(distances)
+        pbc['moyenne'] = 100*sum(distances)/len(distances)
         pbc['max'] = max(distances)
         pbc['min'] = min(distances)
 
@@ -119,10 +132,9 @@ def register(request):
         if user_form.is_valid():
             user = user_form.save()
             login(request, user)
-            return redirect(reverse('index', kwargs={ 'register': True }))
+            return render(request, 'index.html', {'firstime': True})
     else:
         user_form = UserForm()
-    print("Okj")
     return render(request, 'register.html', {'form' : user_form})
 
 @login_required(login_url='/signin/')

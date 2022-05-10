@@ -1,0 +1,22 @@
+<header class="main-head">
+    <nav>
+        <a href="{% url 'index' %}">
+            <h1 id="logo">FakeNewsDetector</h1>
+        </a>
+        <ul>
+            <li><a href="#concept">Concepts</a></li>
+            <li><a href="#">Contacts</a></li>
+            <li><a href="#donate">Donate</a></li>
+            {% if user.is_authenticated %}
+            {{ register }}
+            {% if not user.myuser.license %}
+            <li id="abonnement" style="background-color:#DC3545; color:white; border-radius:10px; height:110%"><a
+                    href="{% url 'license' %}">Abonne toi!!</a>
+            </li>
+            {% endif %}
+            {% else %}
+            <li><a href="{% url 'login' %}">Sign In</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>

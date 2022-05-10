@@ -170,14 +170,29 @@
 <!--Code javascript pour la modale-->
 
 <script>
-    // Get the modal
+// Get the modal
     var modal = document.getElementById("myModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            const resultElement = document.querySelector(".compte-contener");
+            resultElement.innerHTML = `<div></div>`;
+        }
+    }
+        
     
     // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
     
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -186,7 +201,6 @@
     // When the user clicks the button, open the modal 
     btn.onclick = function() {
 
-        
         let formData = new FormData();
         formData.append('link_tweet', document.querySelector("#link").value);
         let csrfTokenValue = getCookie('csrftoken');
@@ -225,24 +239,14 @@
                     </div>
 
                     <span>Mots clé : ${result['keyword']}</span>
-                    <div> ${result.probabilites['moyenne']}</div>
+                    <div> ${Math.round(result.probabilites['moyenne'] * 100) / 100}</div>
                     
                 </div>`;
             })
         modal.style.display = "block";
     }
     
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
     
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
 </script>
 
 
@@ -272,7 +276,86 @@
 </script>
     
 
-           
+<script>
+
+    console.log("{{ free_trial }}", '!!!!!');
+    console.log("{{ end_date }}", "....../");
+    const free_trial = "free" === "{{ free_trial }}" ;
+
+    if(free_trial){
+        // Set the date we are counting to
+        var countDownDate = new Date();
+
+        // Set the date we are counting from
+        var countFromDate = new Date({{ start_date }});
+
+        // Set inital distance in seconds
+        var distance = (countDownDate.getTime() - countFromDate.getTime()) / 1000;
+
+        console.log('Join date :', countFromDate);
+        console.log(' date :', countFromDate);
+
+        // Set initial time difference in the DOM
+        var days = Math.floor((distance / (60 * 60 * 24)));
+        var hours = Math.floor((distance - (days * (60 * 60 * 24))) / (60 * 60));
+        var minutes = Math.floor((distance - ((days * (60 * 60 * 24)) + (hours * (60 * 60)))) / 60);
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        var timer = days + ' ' + hours + ' ' + minutes + ' ' + seconds
+        console.log(timer);
+
+        if("{{firstime}}"){
+        console.log("{{firstime}}");
+        console.log("Toutes les ressources sont chargées !");
+        const resultElement = document.querySelector(".compte-contener");
+        resultElement.innerHTML = `<h1 id='timeleft' style="text-align:center;margin-bottom:10%">
+            Il vous restes <span style="color: red; margin-bottom:20px"> ${days>0? days + 'jours ': ''}
+                ${hours>0? hours + 'heures ': ''} ${minutes>0? minutes + 'minutes ':
+            ''}</span> pour votre période d'essais
+        </h1>`;
+        var notation = document.querySelector('.notation');
+        notation.style.display = "none";
+        modal.style.display = "block";
+        }
+
+        // Timer
+        {% comment %} let active = true;
+
+        startTimer = () => {
+            if (active) {
+                let nums = timer.split(" ").map(num => parseInt(num))
+                let day = nums[0];
+                let hour = nums[1];
+                let min = nums[2];
+                let sec = nums[3];
+                if (sec == 0) {
+                    if (min == 0) {
+                        hour--;
+                        min = 59;
+                        if (hour == 0) {
+                            day--;
+                            hour = 23;
+                        }
+                        if (hour < 10) hour = "0" + hour;
+                    } else {
+                        min--;
+                    }
+                    if (min < 10) min = "0" + min;
+                    sec = 59;
+                } else {
+                    sec--;
+                    console.log(sec)
+                    if (sec < 10) sec = "0" + sec;
+                }
+                console.log(day + ' ' + hour + ' ' + min + ' ' + sec);
+                timer = days + ' ' + hours + ' ' + minutes + ' ' + seconds
+                setTimeout(startTimer, 1000);
+            }
+        } 
+        startTimer();
+        {% endcomment %}
+        
+    }
+</script>
 
 
 

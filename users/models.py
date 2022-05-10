@@ -22,6 +22,7 @@ class License(models.Model):
     request_number = models.IntegerField(blank=True, null=True)
     token = models.CharField(max_length=1024)
     
+    @property
     def is_expired(self):
         if self.type == license_type[2][0]:
             return self.request_number == 0
@@ -44,7 +45,15 @@ class License(models.Model):
     
 
 class MyUser(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='myuser')
     license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
     profile_image = models.ImageField(upload_to=upload_to, null=True, blank=True, default="media/default.png")
     
+    @property
+    def is_free_trial(self)-> str:
+        print("Dans")
+        print(bool(self.license ))
+        if not self.license:
+            return True
+        else:
+            return False

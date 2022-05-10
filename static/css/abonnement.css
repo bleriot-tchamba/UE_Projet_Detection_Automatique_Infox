@@ -2,6 +2,27 @@
   font-family: Helvetica, sans-serif !important;
 }
 
+.main-head {
+    background-color:black;
+    color: #ffffff;
+    height: 3em;
+    display: flex;
+    align-items: center
+}
+#logo {
+    flex: 2 1 40rem;
+}
+
+a .h3 {
+    color: #ffffff;
+    text-decoration:none ;
+}
+
+a:hover .h3{
+    text-decoration:underline ;
+    color: #ffffff;
+}
+
 p {
   font-family: sans-serif;
   font-size: 1.2em;
@@ -26,4 +47,9 @@ p {
     box-shadow: 0 0 10px #515151;
     cursor: pointer;
     /* width: 34%; */
+}
+
+#timeleft{
+    background-color: red !important;
+    font-size: 3em;
 }
