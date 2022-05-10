@@ -1,11 +1,13 @@
-from audioop import avg
 import json
 
 import Levenshtein
 
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
+from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 
 import pytwitter
 from pytwitter import Api
@@ -15,6 +17,9 @@ import tweepy
 from gensim.summarization.summarizer import summarize
 from gensim.summarization import keywords
 
+from users.forms import UserForm, UserLoginForm
+
+User = get_user_model()
 
 # Create your views here.
 b_token = "AAAAAAAAAAAAAAAAAAAAAEe0bgEAAAAAFljvcKIPBris5Mn2toYpNUaF%2BQE%3DDnaNicqUFJSq3J9wcDofcw8Ea7Wjb1ditpUCv8rcdZBbJskOHE"
@@ -26,7 +31,8 @@ access_token = "1511063864884006918-Kym3fIV1YLx03WzKWufZj8Z13J7ukp"
 access_secret = "cuZPDdGJMVZTqkr6qNv83HFRsCLF4NhTTbM6CaYWC4PMz"
 
 
-def index(request):
+@login_required(login_url='/signin/')
+def index(request, **kwargs):
     
     liste = [1,2,3,4,5,6]
 
@@ -52,18 +58,18 @@ def extract_subject(request):
         
         # response = api.get_tweet(tweet_id=link_tweet,expansions="author_id",tweet_fields=["created_at"], user_fields=["id", "username","verified", 'name'])
 
-        tweet = api_tweepy.get_status(link_tweet)
+        tweet = api_tweepy.get_status(link_tweet, tweet_mode="extended")
         
-        key_words = keywords(tweet.text, words=5, lemmatize=True).replace('\n', ' ')
+        key_words = keywords(tweet.full_text, words=5, lemmatize=True).replace('\n', ' ')
         
-        tweets = api_tweepy.search_tweets(key_words, count=300)
+        tweets = api_tweepy.search_tweets(key_words, count=300, tweet_mode='extended')
         distances = []
         identique = []
         
         for search_tweet in tweets:
-            print(search_tweet.text, ".......",tweet.text, "\n\n")
-            identique.append(search_tweet.text==tweet.text)
-            distances.append(Levenshtein.ratio(tweet.text, search_tweet.text))
+            print(search_tweet.full_text, ".......",tweet.full_text, "\n\n")
+            identique.append(search_tweet.full_text==tweet.full_text)
+            distances.append(Levenshtein.ratio(tweet.full_text, search_tweet.full_text))
         
         print(tweet.text, '....\n\n')
         print("keywords:",key_words, '....\n\n')
@@ -75,12 +81,9 @@ def extract_subject(request):
         pbc['moyenne'] = sum(distances)/len(distances)
         pbc['max'] = max(distances)
         pbc['min'] = min(distances)
-        
-        
-        
 
         
-        return JsonResponse(status=200, data={'msg': tweet.text, 'user': json.dumps(tweet.user._json), 'keyword': key_words, 'probabilites': json.dumps(pbc)})
+        return JsonResponse(status=200, data={'msg': tweet.full_text, 'user': json.dumps(tweet.user._json), 'keyword': key_words, 'probabilites': json.dumps(pbc)})
     except pytwitter.error.PyTwitterError as e:
         print("Execption ....:", e)
         return JsonResponse(status=500, data={'msg': 'Bad request'})
@@ -89,8 +92,39 @@ def extract_subject(request):
         return JsonResponse(status=500, data={'msg': 'Bad request'})
 
 
-def login(request):
-    return render(request, 'login.html')
+@login_required(login_url='/signin/')
+def deconnecter(request):
+    logout(request)
+    return redirect('login')
+
+
+def signin(request):
+    if request.method == 'POST':
+        user_form = UserLoginForm(request.POST)
+        print("before")
+        if user_form.is_valid():
+            user = user_form.cleaned_data['username']
+            login(request, user)
+            return redirect('index')
+        print('after')
+    else:
+        user_form = UserLoginForm()
+    return render(request, 'login.html', {'form': user_form})
+
 
 def register(request):
-    return render(request, 'register.html')
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        print(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            login(request, user)
+            return redirect(reverse('index', kwargs={ 'register': True }))
+    else:
+        user_form = UserForm()
+    print("Okj")
+    return render(request, 'register.html', {'form' : user_form})
+
+@login_required(login_url='/signin/')
+def abonnement(request):
+    return render(request, 'licence.html')

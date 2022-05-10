@@ -7,6 +7,7 @@
         <title>Fake-News Detections</title>
         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
         <script src="https://kit.fontawesome.com/f1fb171e01.js" crossorigin="anonymous"></script>
+        
     </head>
     <body>
         <header class="main-head">
@@ -16,7 +17,15 @@
                     <li><a href="#concept">Concepts</a></li>
                     <li><a href="#">Contacts</a></li>
                     <li><a href="#donate">Donate</a></li>
-                    {% if not user.is_authenticated %}
+                    {% if user.is_authenticated %}
+                        {{ register }}
+                        {% if not user.myuser.license %}
+                            <li id="abonnement"
+                                style="background-color:#DC3545; color:white; border-radius:10px; height:110%"><a
+                                    href="{% url 'license' %}"
+                                    >Abonne toi!!</a>
+                            </li>
+                        {% endif %}
                     {% else %}
                     <li><a href="{% url 'login' %}">Sign In</a></li>
                     {% endif %}
@@ -199,7 +208,7 @@
             .then(result => {
                 console.log(result);
                 result.user = JSON.parse(result.user);
-                //result.probabilites = JSON.parse(result.probabilites);
+                result.probabilites = JSON.parse(result.probabilites);
                 const resultElement = document.querySelector(".compte-contener");
                 resultElement.innerHTML = `<div class="bloc">
                     <div class="entete-compte" >

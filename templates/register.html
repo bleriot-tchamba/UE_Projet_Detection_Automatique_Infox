@@ -7,15 +7,20 @@
 {% block mt %}mt-2 mx-5 pt-2{% endblock mt %}
 
 {% block form %}
-<form action="">
+<form method="post">
+    {% csrf_token %}
     <div class="formgroup">
         <label class="form-label" for="username">Username <span class="text-danger">*</span></label>
         <input type="text" name="username" placeholder="kndb" class="form-control border-0" required>
-        <label class="form-label" for="username">Email </label>
+        <label class="text-danger">{{ form.username.errors }}</label><br />
+
+        <label class="form-label" for="email">Email </label>
         <input type="email" name="email" placeholder="kndb@gmail.com" class="form-control border-0">
+        <label class="text-danger">{{ form.email.errors }}</label><br />
+
         <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
         <div class="input-group">
-            <input id="password" class="form-control border-end-0 border input w-" type="password">
+            <input id="password" class="form-control border-end-0 border input w-" type="password" name="password">
             <span class="input-group-append">
                 <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
                     onclick="showhide('password')" type="button">
@@ -23,9 +28,11 @@
                 </button>
             </span>
         </div>
+        <label class="text-danger">{{ form.password.errors }}</label><br />
+
         <label class="form-label" for="password">Confirm password <span class="text-danger">*</span></label>
         <div class="input-group">
-            <input id="confirmPassword" class="form-control border-end-0 border input w-" type="password">
+            <input id="confirmPassword" class="form-control border-end-0 border input w-" type="password" name="confirm_password">
             <span class="input-group-append">
                 <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
                     onclick="showhide('confirmPassword')" type="button">

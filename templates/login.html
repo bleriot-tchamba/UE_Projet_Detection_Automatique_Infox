@@ -5,13 +5,16 @@
 {% block main_title %}Sign In{% endblock main_title %}
 
 {% block form %}
-<form action="">
+<form method="post">
+    {% csrf_token %}
     <div class="formgroup">
         <label class="form-label" for="username">Username <span class="text-danger">*</span></label>
-        <input type="text" name="username" placeholder="kndb" class="form-control border-0" required>
+        <input type="text" name="username" placeholder="kndb" class="form-control border-0" required
+            value="{{ form.username.text }}">
+        <label>{{ form.username.errors }}</label><br>
         <label class="form-label" for="password">Password <span class="text-danger">*</span></label>
         <div class="input-group">
-            <input id="password" class="form-control border-end-0 border input w-" type="password">
+            <input id="password" class="form-control border-end-0 border input w-" type="password" name="password">
             <span class="input-group-append">
                 <button class="btn btn-outline-secondary bg-white border-start-0 border-bottom-0 border ms-n5"
                     onclick="showhide()" type="button">
@@ -19,6 +22,7 @@
                 </button>
             </span>
         </div>
+        <label>{{ form.password.errors }}</label>
         <span class="d-flex justify-content-end">
             <a class="color-twitter" href="{% url 'register' %}">Don't have an account?
                 register here</a>

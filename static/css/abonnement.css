@@ -1,0 +1,29 @@
+* {
+  font-family: Helvetica, sans-serif !important;
+}
+
+p {
+  font-family: sans-serif;
+  font-size: 1.2em;
+}
+
+.h3 {
+  color: #1da0f1;
+}
+.special {
+  background-color: #1da0f1;
+  color: white;
+}
+
+.item {
+  border-radius: 20px;
+  width: 30%;
+  transition: box-shadow 0.7s;
+  /* transition: width 1s; */
+}
+
+.item:hover{
+    box-shadow: 0 0 10px #515151;
+    cursor: pointer;
+    /* width: 34%; */
+}

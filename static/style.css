@@ -479,6 +479,17 @@ nav ul{
   }
 
 
-  bg-red {
+.bg-red {
       background-color: red !important;
   }
+
+.btn{
+    border-style: solid;
+    border-radius: 10px;
+}
+
+#abonnement{
+    display: block;
+    background-color: #DC3545 !important;
+    height: 100px;
+}

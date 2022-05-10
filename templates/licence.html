@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/abonnement.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Licence</title>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="row d-flex justify-content-center text-center mb-4">
+            <h1> Differents abonnements </h1>
+        </div>
+        <div class="row d-flex flex-row justify-content-around">
+            <div class="d-flex flex-column border border-1 p-2 item">
+                <div class="plan-header-container  ">
+                    <p class="text-center pt-title h3">
+                        Abonnement Mensuel
+                    </p>
+                    <p class="mt-10 mh-50-md pt-description text-dark">Solution idéale pour les
+                        personnes
+                        ayant
+                        des revenus moyens chaque mois</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-around my-1"><s
+                        class="text-content-grey mr-5 ml-5 pt-discounted-price white-space-no-wrap"
+                        data-original-price="10.19"> 5000 XAF</s>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="h1">
+                        3000 XAF
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="">
+                        <div class="btn h1 btn-dark">
+                            Souscrire
+                        </div>
+
+                    </a>
+                </div>
+                <p class="text-center">
+                    Vérifier autant de tweets que vous voulez sur une période d'un mois
+                </p>
+            </div>
+            <div class="d-flex flex-column border border-1 p-2 item">
+                <div class="plan-header-container  ">
+                    <p class="text-center pt-title h3">
+                        Abonnement Annuel
+                    </p>
+                    <p class="mt-10 mh-50-md pt-description text-dark">Solution idéale pour les
+                        personnes
+                        ayant
+                        des revenus conséquent</p>
+                </div>
+                <div class="d-flex align-items-center justify-content-around my-1"><s
+                        class="text-content-grey mr-5 ml-5 pt-discounted-price white-space-no-wrap"
+                        data-original-price="10.19"> 25 000 XAF</s>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <div class="h1">
+                        15000 XAF
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="">
+                        <div class="btn h1 special">
+                            Souscrire
+                        </div>
+                    </a>
+                    
+                </div>
+                <p class="text-center">
+                    Vérifier autant de tweets que vous voulez sur une période de 12 mois.
+                </p>
+            </div>
+            <div class="d-flex flex-column border border-1 p-2 item">
+                <div class="plan-header-container  ">
+                    <p class="text-center pt-title h3">
+                        Abonnement Counter
+                    </p>
+                    <p class="mt-10 mh-50-md pt-description text-dark">Solution idéale pour les
+                        personnes
+                        voulant effectuer un nombre précis de vérifications</p>
+                </div>
+                
+                <div class="d-flex flex-column justify-content-center align-items-center">
+                    <div class="h2 m-0">
+                        100 XAF/
+                    </div>
+                    <div class="h2 mt-0">
+                        50 Requetes
+                    </div>
+                </div>
+                {% comment %} <div class="d-flex align-items-center mb-1">
+                    <div>
+                        <div>
+                            <p class="d-inline">Nombre de requêts</p>
+                            <input class="w-50" type="number" value="50" name="request_number">
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="d-flex justify-content-center">
+                    <a href="">
+                        <div class="btn h1 btn-dark">
+                            Souscrire
+                        </div>
+                    </a>
+                    
+                </div>
+                <p class="text-center">
+                    Vérifier un nombre restreint de Tweets
+                </p>
+            </div>
+        </div>
+
+</body>
+
+</html>

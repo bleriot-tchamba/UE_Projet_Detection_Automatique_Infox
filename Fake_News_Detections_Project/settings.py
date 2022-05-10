@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Fake_News_Detections_App',
+    
+    'users',
 ]
 
 MIDDLEWARE = [
