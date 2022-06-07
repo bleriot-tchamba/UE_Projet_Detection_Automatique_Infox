@@ -2,6 +2,7 @@ import json
 import time
 from datetime import timedelta
 import Levenshtein
+import uuid
 
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
@@ -20,6 +21,7 @@ from gensim.summarization.summarizer import summarize
 from gensim.summarization import keywords
 
 from users.forms import UserForm, UserLoginForm
+from users.models import License, MyUser
 
 User = get_user_model()
 
@@ -34,8 +36,7 @@ access_secret = "cuZPDdGJMVZTqkr6qNv83HFRsCLF4NhTTbM6CaYWC4PMz"
 
 
 @login_required(login_url='/signin/')
-def index(request, **kwargs):
-    
+def index(request, **kwargs):    
     liste = [1,2,3,4,5,6]
     end_date = timezone.now() - request.user.date_joined
     context = {
@@ -50,7 +51,6 @@ def index(request, **kwargs):
         context['start_date'] = int(time.mktime(request.user.date_joined.timetuple())) * 1000
         context['free_trial'] = "free"
             
-
     else:
         is_expired = request.user.myuser.is_expired
         context['is_expired'] = is_expired
@@ -91,7 +91,11 @@ def extract_subject(request):
         print(identique)
         
         pbc = dict()
-        pbc['moyenne'] = 100*sum(distances)/len(distances)
+        try:
+            pbc['moyenne'] = 100*sum(distances)/len(distances)
+        except Exception as e:
+            pbc['moyenne'] = 0
+            
         pbc['max'] = max(distances)
         pbc['min'] = min(distances)
 
@@ -142,3 +146,21 @@ def register(request):
 @login_required(login_url='/signin/')
 def abonnement(request):
     return render(request, 'licence.html')
+
+@login_required(login_url='/signin/')
+def valid_abonnement(request):
+    licence = License(
+        type = 'NUMBER',
+        token = uuid.uuid1()
+    )
+    licence.save()
+    u = MyUser.objects.get(user=request.user)
+    u.license = licence
+    u.save()
+    return redirect('index')
+
+def paiement(request):
+    context = dict()
+    context['amount'] = int(request.GET.get('amount', 100))
+    context['paiement_id'] = uuid.uuid1()
+    return render(request, 'paiment.html', context)

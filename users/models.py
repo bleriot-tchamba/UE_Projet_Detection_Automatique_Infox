@@ -46,7 +46,7 @@ class License(models.Model):
 
 class MyUser(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='myuser')
-    license = models.ForeignKey(License, on_delete=models.CASCADE, null=True, blank=True)
+    license = models.ForeignKey(License, on_delete=models.SET_NULL, null=True, blank=True)
     profile_image = models.ImageField(upload_to=upload_to, null=True, blank=True, default="media/default.png")
     
     @property
@@ -57,3 +57,7 @@ class MyUser(models.Model):
             return True
         else:
             return False
+        
+    @property
+    def is_expired(self)-> bool:
+        return False

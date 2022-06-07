@@ -38,9 +38,10 @@
                                     >Abonne toi!!</a>
                             </li>
 
-                             <li><a href="{% url 'logout' %}">Logout</a>
+                             
                             </li>
                         {% endif %}
+                        <li><a href="{% url 'logout' %}">Logout</a>
                     {% else %}
                     <li><a href="{% url 'login' %}">Sign In</a></li>
                     {% endif %}
@@ -179,14 +180,14 @@
                 </div>
             </div>
 
-            <div id="donate">
+            {% comment %} <div id="donate">
                 <h2>Donate</h2>
                 <div class="payments">
                     <img src="static/Paypal.png" height="200">
                     <img class="MTN_image" src="static/MTN.png" height="200">
                     <img class="orange_image" src="static/orange-money.png" height="200">
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>    
 
 
@@ -382,15 +383,19 @@
 
         console.log('Join date :', countFromDate);
         console.log(' date :', countFromDate);
+        console.log('Distance :', new Date(new Date().setDate(countFromDate.getDate() - 30)));
+
 
         // Set initial time difference in the DOM
         var days = Math.floor((distance / (60 * 60 * 24)));
         var hours = Math.floor((distance - (days * (60 * 60 * 24))) / (60 * 60));
         var minutes = Math.floor((distance - ((days * (60 * 60 * 24)) + (hours * (60 * 60)))) / 60);
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        var timer = days + ' ' + hours + ' ' + minutes + ' ' + seconds
+        var timer = (29-days) + ' ' + (23-hours) + ' ' + (60-minutes) + ' ' + seconds
         console.log(timer);
-
+        days = (29-days);
+        hours = (23-hours);
+        minutes = (60-minutes);
         if("{{firstime}}"){
         console.log("{{firstime}}");
         console.log("Toutes les ressources sont chargées !");
