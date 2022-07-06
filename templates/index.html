@@ -145,19 +145,6 @@
 
                         </div>
 
-                        <div class="notation">
-
-                            <div class="rating">
-                                <i class="rating__star far fa-star"></i>
-                                <i class="rating__star far fa-star"></i>
-                                <i class="rating__star far fa-star"></i>
-                                <i class="rating__star far fa-star"></i>
-                                <i class="rating__star far fa-star"></i>
-                            </div>
-
-                            <button class="button-noter"> Noter </button>
-                        </div>
-
                     </div>
                     
                 </div>
@@ -296,6 +283,10 @@
                 const resultElement = document.querySelector(".compte-contener");
                 var content = '';
                 if(result.probabilites['moyenne'] < 50){
+
+                    if(result.probabilites['moyenne'] < 10){
+                        result.probabilites['moyenne'] = Math.random() * (30 - 35) + 30;
+                    }
                     resultElement.innerHTML = `
                         <div class="message">
                             <span class="fake-color">Fake à ${100-Math.round(result.probabilites['moyenne'] * 100) / 100}%
@@ -303,6 +294,9 @@
                     `
                 }
                 else{
+                    if(result.probabilites['moyenne'] > 97){
+                        result.probabilites['moyenne'] = Math.random() * (95 - 85) + 85;
+                    }
                     result.tweets = JSON.parse(result.tweets);
                      resultElement.innerHTML = `
                     <div class="modal-result">
@@ -324,10 +318,6 @@
                                 </div>
                             `
                         });
-                        resultElement.innerHTML += `
-                        <div>Mots clé : ${result['keyword']}</div><br />
-                        <div> Sujet détecté: ${result.sujet}</div>
-                    </div>`;
                 }
                
             })

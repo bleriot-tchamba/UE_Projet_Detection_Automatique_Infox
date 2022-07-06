@@ -1,6 +1,7 @@
 import json
 import time
 from datetime import timedelta
+from traceback import print_tb
 import Levenshtein
 import uuid
 
@@ -224,6 +225,8 @@ def extract_subject(request):
 
         tweet = api_tweepy.get_status(link_tweet, tweet_mode="extended")
         
+        print(tweet.full_text)
+        
         # Pretraitement
         text = remove_emoji(tweet.full_text)
         text = clean_text(text)
@@ -242,7 +245,7 @@ def extract_subject(request):
 
         
         
-        key_words = keywords(tweet.full_text, words=len(tweet.full_text)/2, lemmatize=True).replace('\n', ' ')
+        key_words = keywords(tweet.full_text, words=5, lemmatize=True).replace('\n', ' ')
         
         seach2 = api_tweepy.search_tweets(cluster_map[pred[0]], count=10, tweet_mode='extended')
         
