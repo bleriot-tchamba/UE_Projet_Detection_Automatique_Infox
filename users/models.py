@@ -4,8 +4,6 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 
-
-
 def upload_to(instance, file_name):
     return f'media/{uuid.uuid4()}{file_name}'
     

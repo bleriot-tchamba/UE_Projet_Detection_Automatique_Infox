@@ -37,6 +37,31 @@ a {
     text-decoration:none ;
 }
 
+.big-text-after-pred{
+    font-size: 2em;
+    color: #1A3257;
+    font-family: 'Helvetica', 'sans-serif';
+}
+.fake-color {
+    color: #E12828;
+    font-family: 'Helvetica', 'sans-serif';
+    font-size: 2em;
+}
+
+.truth-color {
+    color: #21A23F;
+    font-family: 'Helvetica', 'sans-serif';
+    font-size: 3em;
+}
+
+.modal-result{
+    padding-left: 10%;
+}
+
+.d-flex{
+    display: flex;
+    
+}
 /* HEADER */
 
 .main-head {
@@ -290,7 +315,7 @@ nav ul{
 
 
   .close-contener{
-      margin-bottom: 8rem;
+      margin-bottom: 5rem;
   }
   
   
@@ -343,19 +368,57 @@ nav ul{
 
 .truthfulness-rate {
     color: #21A23F;
-    font-size: 55px;
+    font-size: 3em;
     font-family: Helvetica, sans-serif;
     font-weight:bolder;
     font-style: normal;
-    margin-right: 20px;
+    margin-right: 5px;
+}
+
+.false-rate {
+    color: #E12828;
+    font-size: 3em;
+    font-family: Helvetica, sans-serif;
+    font-weight:bolder;
+    font-style: normal;
+    margin-right: 5px;
 }
 
 .text-after-rate {
     color: #1A3257;    
-    font-size: 55px;
+    font-size: 3em;
     font-family: Helvetica, sans-serif;
     font-weight:bolder;
     font-style: normal;
+}
+
+.tweet-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 0.5px solid #1A3257;
+    border-radius: 5px;
+    width: 30%;
+    margin: 5px;
+    padding: 5px;
+}
+
+.flex{
+    display: flex;
+}
+
+.content-between{
+    justify-content: space-around;
+}
+
+.direction-column{
+    flex-direction: column;
+}
+
+.profil-image{
+    border-radius: 50%;
+    width: 60px;
+    height: 600;
 }
 
 .result { /* div that content *truthfulness-rate* and *text-after-rate* */
@@ -537,4 +600,25 @@ nav ul{
     display: block;
     background-color: #DC3545 !important;
     height: 100px;
+}
+
+#loader {
+  width: 60px;
+  height: 60px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

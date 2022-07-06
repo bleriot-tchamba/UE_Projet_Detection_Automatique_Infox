@@ -114,14 +114,13 @@
                         <div class="close-contener">
                             <span class="close">&times;</span>
                         </div>
-{% comment %}                         
-                        <div class="result"> 
+                        {% comment %} <div class="result"> 
                            <span class="truthfulness-rate">Vrai à 75% </span>
                            <span class="text-after-rate">l'information du tweet à été cité par </span>
                         </div> {% endcomment %}
 
                         <div class="compte-contener">
-                            {% comment %} {% for idi in liste %} 
+                            {% for idi in liste %} 
                             <div class="infos-comptes">
                                 <div class="entete-compte">
                                     <img class="image-compte" src= "static/Icon awesome-facebook.png" height="85">
@@ -142,7 +141,7 @@
 
 
                             </div>
-                            {% endfor %} {% endcomment %}
+                            {% endfor %}
 
                         </div>
 
@@ -180,14 +179,23 @@
                 </div>
             </div>
 
-            {% comment %} <div id="donate">
-                <h2>Donate</h2>
+            <div id="donate">
+                <h2>Development team</h2>
                 <div class="payments">
-                    <img src="static/Paypal.png" height="200">
-                    <img class="MTN_image" src="static/MTN.png" height="200">
-                    <img class="orange_image" src="static/orange-money.png" height="200">
+                    <div class="card">
+                        <img src="{% static 'images/bleriot.png' %}" alt="" width="250px">
+                        <h3>Blériot BETNDAM</h3>
+                    </div>
+                    <div class="card">
+                        <img src="{% static 'images/Dk.png' %}" alt="" width="250px">
+                        <h3>Durande KAMGA</h3>
+                    </div>
+                    <div class="card">
+                        <img src="{% static 'images/marivone.png' %}" alt="" width="100%">
+                        <h3>Marivone KEBOU</h3>
+                    </div>
                 </div>
-            </div> {% endcomment %}
+            </div>
         </div>    
 
 
@@ -255,6 +263,11 @@
     }
     // When the user clicks the button, open the modal 
     btn.onclick = function() {
+        const resultElement = document.querySelector(".compte-contener");
+        resultElement.innerHTML = `
+            <div id="loader">
+            </div>
+        `
 
         let formData = new FormData();
         formData.append('link_tweet', document.querySelector("#link").value);
@@ -266,38 +279,68 @@
             headers: {'X-CSRFToken': csrfTokenValue}
         });
         fetch(request)
-        .catch(error => {
-            const resultElement = document.querySelector(".compte-contener");
-            resultElement.innerHTML = `<div class="bloc">
-                Une erreur est survenue; 
-                Vérifié le lien ou votre connexion internet
-            </div>`;
+         .then(response => {
+            console.log(response.statut);
+            if(response.ok){
+                return response.json()
+            }
+            else{
+                return response.text().then(text => { throw text })
+            }
         })
-            .then(response => response.json())
             .then(result => {
+                document.getElementById("loader").style.display = "none";
                 console.log(result);
                 result.user = JSON.parse(result.user);
                 result.probabilites = JSON.parse(result.probabilites);
                 const resultElement = document.querySelector(".compte-contener");
-                resultElement.innerHTML = `<div class="bloc">
-                    <div class="entete-compte" >
-                        <img class="image-compte" src="${result.user.profile_image_url_https}" height="80"
-                            width="80">
-                        <div class="nameAccount-and-username">
-                            <span class="username">@${result.user.screen_name}</span>
+                var content = '';
+                if(result.probabilites['moyenne'] < 50){
+                    resultElement.innerHTML = `
+                        <div class="message">
+                            <span class="fake-color">Fake à ${100-Math.round(result.probabilites['moyenne'] * 100) / 100}%
                         </div>
-
-                    </div>
-
-                    <div class="message">
-                        ${result['msg']}
-                    </div>
-
-                    <span>Mots clé : ${result['keyword']}</span>
-                    <div> ${Math.round(result.probabilites['moyenne'] * 100) / 100}</div>
-                    
-                </div>`;
+                    `
+                }
+                else{
+                    result.tweets = JSON.parse(result.tweets);
+                     resultElement.innerHTML = `
+                    <div class="modal-result">
+                        <div>
+                            <span class="truthfulness-rate"> Vrai à ${Math.round(result.probabilites['moyenne'] * 100) / 100}%</span><span class="text-after-rate"> l'information du tweet à été cité par ses source(s) fiable(s):</span>
+                        </div>`
+                        result.tweets.forEach(function (item, index) {
+                            item = JSON.parse(item);
+                            resultElement.innerHTML += `
+                                <div class="tweet-info">
+                                    <div class="flex content-between">
+                                        <img class="profil-image" src="${item.user.profile_image_url_https}" alt="profil">
+                                        <div class="flex direction-column">
+                                            <p>${item.user.name}</p>
+                                            <p>@${item.user.screen_name}</p>
+                                        </div>
+                                    </div>
+                                    <p>${item.full_text}</p>
+                                </div>
+                            `
+                        });
+                        resultElement.innerHTML += `
+                        <div>Mots clé : ${result['keyword']}</div><br />
+                        <div> Sujet détecté: ${result.sujet}</div>
+                    </div>`;
+                }
+               
             })
+        .catch(error => {
+            document.getElementById("loader").style.display = "none";
+            const resultElement = document.querySelector(".compte-contener");
+            resultElement.innerHTML = `
+            <div>
+                <span class="fake-color">${JSON.parse(error).msg}</span>
+            </div>
+        `;
+        })
+           
         modal.style.display = "block";
     }
     

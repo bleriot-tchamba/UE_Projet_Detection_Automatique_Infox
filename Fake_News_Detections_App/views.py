@@ -20,10 +20,24 @@ import tweepy
 from gensim.summarization.summarizer import summarize
 from gensim.summarization import keywords
 
+#Invoke libraries
+from nltk import pos_tag, word_tokenize
+from nltk.corpus import wordnet as wn
+
+import re
+import nltk.corpus
+#nltk.download('stopwords')
+from nltk.corpus import stopwords
+import nltk
+from nltk.stem.porter import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+
 from users.forms import UserForm, UserLoginForm
 from users.models import License, MyUser
 
 User = get_user_model()
+w_tokenizer = nltk.tokenize.WhitespaceTokenizer()
+lemmatizer = nltk.stem.WordNetLemmatizer()
 
 # Create your views here.
 b_token = "AAAAAAAAAAAAAAAAAAAAAEe0bgEAAAAAFljvcKIPBris5Mn2toYpNUaF%2BQE%3DDnaNicqUFJSq3J9wcDofcw8Ea7Wjb1ditpUCv8rcdZBbJskOHE"
@@ -57,9 +71,142 @@ def index(request, **kwargs):
     
     return render(request, 'index.html', context)
 
-def extract_subject(request):
+#Eleminons les emojis
+def remove_emoji(text):
+    emoji_pattern = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        u"\U00002500-\U00002BEF"  # chinese char
+        u"\U00002702-\U000027B0"
+        u"\U00002702-\U000027B0"
+        u"\U000024C2-\U0001F251"
+        u"\U0001f926-\U0001f937"
+        u"\U00010000-\U0010ffff"
+        u"\u2640-\u2642" 
+        u"\u2600-\u2B55"
+        u"\u200d"
+        u"\u23cf"
+        u"\u23e9"
+        u"\u231a"
+        u"\ufe0f"  # dingbats
+        u"\u3030"
+                      "]+", re.UNICODE)
+    return emoji_pattern.sub(r'', text)
+
+#Nettoyage des donnees
+def clean_text(text):
+    
+    text = re.sub('https\S+',"",text) #Suprression des liens
+    #text = re.sub('#\S+',"",text) #Suppression des hastags
+    pattern = r'[@&!\?\.#(-:/\\0123456789\+\n\t;\|_$.%''"‘’↓→' '\(\)°]'
+    text = re.sub(pattern, " ", text) #Suppression des caracteres
+    text = text.lower() #Mettre en minuscule
+    stop = stopwords.words('english') #Suppression des mots d'arrets de la langue anglaise
+    text = " ".join([word for word in text.split() if word not in (stop)])  #Supression des mots d'arrets
+    text = " ".join([lemmatizer.lemmatize(w) for w in w_tokenizer.tokenize(text)]) #Lemmatization
+    tokens = nltk.word_tokenize(text) # tokenization
+    text = " ".join(tokens)
+    return text
+
+
+#Supression des mots de longueur inferieur a deux
+def delete_w(texts):
+    L = []
+    F = []
+    L = texts.split() 
+    t=""
+    for words in L:
+        if len(words)>2:
+            F.append(words)
+        t=' '.join(F)
+    return t
+
+
+#Build functions to compute similarity
+def ptb_to_wn(tag):    
+    if tag.startswith('N'):
+        return 'n' 
+    if tag.startswith('V'):
+        return 'v' 
+    if tag.startswith('J'):
+        return 'a' 
+    if tag.startswith('R'):
+        return 'r' 
+    return None
+
+
+def tagged_to_synset(word, tag):
+    wn_tag = ptb_to_wn(tag)
+    if wn_tag is None:
+        return None 
     try:
-        link_tweet = request.POST.get('link_tweet').split('/')[-1]
+        return wn.synsets(word, wn_tag)[0]
+    except:
+        return None
+
+
+def sentence_similarity(s1, s2):    
+    s1 = pos_tag(word_tokenize(s1))
+    s2 = pos_tag(word_tokenize(s2)) 
+
+    synsets1 = [tagged_to_synset(*tagged_word) for tagged_word in s1]
+    synsets2 = [tagged_to_synset(*tagged_word) for tagged_word in s2]
+
+
+    #suppress "none"
+    synsets1 = [ss for ss in synsets1 if ss]
+    synsets2 = [ss for ss in synsets2 if ss]
+
+    score, count = 0.0, 0
+
+    for synset in synsets1:
+        best_score = max([synset.path_similarity(ss) for ss in synsets2])
+        if best_score is not None:
+            score += best_score
+            count += 1
+
+    # Average the values
+    if count != 0:
+        score /= count
+    return score
+
+#compute the symmetric sentence similarity
+def symSentSim(s1, s2):
+    sss_score = (sentence_similarity(s1, s2) + sentence_similarity(s2,s1)) / 2
+    return (sss_score)
+
+def extract_subject(request):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    import pickle
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('wordnet')
+    nltk.download('omw-1.4')
+    tft = None
+    kmean = None
+    cluster_map = {0: "Tech", 1: "Nutrition", 2: "World", 3: "Health", 4: "Cancer", 5: "Bussinness", 6: "Basketball", 7: "Education", 8: "Football", 9: "Africa",10:"News"}
+    
+    from os import listdir
+    from os.path import isfile, join
+    import pandas as pd
+    onlyfiles = [f for f in listdir('./') if isfile(join('./', f))]
+
+    with open('models_ds/tfid.vectorizer', 'rb') as f:
+        tft = pickle.load(f)
+    
+    with open('models_ds/kmeans.model', 'rb') as f:
+        kmean = pickle.load(f)
+        
+    try:
+        from .account import account as legitimate_account
+        
+        link_tweet = request.POST.get('link_tweet').split('/')
+        if 'twitter.com' not in link_tweet or not link_tweet[-1].isnumeric():
+            return JsonResponse(status=400, data={'msg': 'Entrez un lien Twitter Valide'})
+        
+        link_tweet = link_tweet[-1]
         # api = Api(
         #     consumer_key=api_key,
         #     consumer_secret=api_secrets,
@@ -71,39 +218,77 @@ def extract_subject(request):
         auth.set_access_token(access_token, access_secret)
         api_tweepy = tweepy.API(auth)
         
+        
+        
         # response = api.get_tweet(tweet_id=link_tweet,expansions="author_id",tweet_fields=["created_at"], user_fields=["id", "username","verified", 'name'])
 
         tweet = api_tweepy.get_status(link_tweet, tweet_mode="extended")
         
-        key_words = keywords(tweet.full_text, words=5, lemmatize=True).replace('\n', ' ')
+        # Pretraitement
+        text = remove_emoji(tweet.full_text)
+        text = clean_text(text)
+        text = delete_w(text)
+        
+        # Vectorisation
+        text = tft.transform([text])
+
+        text = pd.DataFrame(text.toarray(), columns = tft.get_feature_names_out())
+        
+        print(text, '.....!!!!!')
+        
+        pred = kmean.predict(text)
+        
+        print(pred)
+
+        
+        
+        key_words = keywords(tweet.full_text, words=len(tweet.full_text)/2, lemmatize=True).replace('\n', ' ')
+        
+        seach2 = api_tweepy.search_tweets(cluster_map[pred[0]], count=10, tweet_mode='extended')
         
         tweets = api_tweepy.search_tweets(key_words, count=300, tweet_mode='extended')
         distances = []
-        identique = []
+        t = []
+        for search_tweet in [tweet] + tweets + seach2:
+            #print(search_tweet.full_text, ".......",tweet.full_text, "\n\n")
+            if search_tweet.user.screen_name in legitimate_account or search_tweet.user.verified:
+                print(f"Un compte légitime: {search_tweet.user.screen_name}, msg: {search_tweet.full_text}")
+                a = symSentSim(tweet.full_text, search_tweet.full_text)
+                t.append(search_tweet)    
+                distances.append(a) 
+            #distances.append(Levenshtein.ratio(tweet.full_text, search_tweet.full_text))
+        # print("keywords:",key_words, '....\n\n')
+        # print(tweets, '....\n\n\n')
+        # print(f'mayenne = {sum(distances)/len(distances)}', f'max={max(distances)}', f'min={min(distances)}')
+        # print(identique)
         
-        for search_tweet in tweets:
-            print(search_tweet.full_text, ".......",tweet.full_text, "\n\n")
-            identique.append(search_tweet.full_text==tweet.full_text)
-            distances.append(Levenshtein.ratio(tweet.full_text, search_tweet.full_text))
-        print("keywords:",key_words, '....\n\n')
-        print(tweets, '....\n\n\n')
-        print(f'mayenne = {sum(distances)/len(distances)}', f'max={max(distances)}', f'min={min(distances)}')
-        print(identique)
+        
+        # print(f"Valeur prédite: {cluster_map[pred[0]]}")
+        # print(f'Nombre de resultat de recherche : {len(tweets)}')
+        # print(f'Nombre de resultat provenant de compte certifié : {count_legitime}')
+        
         
         pbc = dict()
-        try:
+        if len(distances) > 0:
             pbc['moyenne'] = 100*sum(distances)/len(distances)
-        except Exception as e:
+        else:
             pbc['moyenne'] = 0
-            
-        pbc['max'] = max(distances)
-        pbc['min'] = min(distances)
+        
+        if len(distances) > 0:
+            pbc['max'] = max(distances)
+            pbc['min'] = min(distances)
+        else:
+            pbc['max'] = 0
+            pbc['min'] = 0
+        tweets_validated = []
+        for search_tweet in t:
+            tweets_validated.append(json.dumps(search_tweet._json))
 
         
-        return JsonResponse(status=200, data={'msg': tweet.full_text, 'user': json.dumps(tweet.user._json), 'keyword': key_words, 'probabilites': json.dumps(pbc)})
+        return JsonResponse(status=200, data={'msg': tweet.full_text, 'user': json.dumps(tweet.user._json), 'keyword': key_words, 'probabilites': json.dumps(pbc), 'sujet':cluster_map[pred[0]], 'tweets':json.dumps(tweets_validated)})
     except pytwitter.error.PyTwitterError as e:
         print("Execption ....:", e)
-        return JsonResponse(status=500, data={'msg': 'Bad request'})
+        return JsonResponse(status=403, data={'msg': 'Problème de connexion vérifiez votre connexion internet et recommencer'})
     except Exception as e:
         print("Execption:", e)
         return JsonResponse(status=500, data={'msg': 'Bad request'})
