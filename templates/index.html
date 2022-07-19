@@ -301,7 +301,7 @@
                      resultElement.innerHTML = `
                     <div class="modal-result">
                         <div>
-                            <span class="truthfulness-rate"> Vrai à ${Math.round(result.probabilites['moyenne'] * 100) / 100}%</span><span class="text-after-rate"> l'information du tweet à été cité par ses source(s) fiable(s):</span>
+                            <span class="truthfulness-rate"> Vrai à ${Math.round(result.probabilites['moyenne'] * 100) / 100}%</span><span class="text-after-rate"> l'information du tweet à été cité par ces source(s) fiable(s):</span>
                         </div>`
                         result.tweets.forEach(function (item, index) {
                             item = JSON.parse(item);
